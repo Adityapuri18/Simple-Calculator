@@ -301,14 +301,18 @@ function evaluateExpression(input) {
   const tokens = withImplicitMultiplication(tokenize(input));
   const rpn = toRpn(tokens);
   const value = evalRpn(rpn);
-  return Number.isInteger(value) ? String(value) : String(parseFloat(value.toFixed(10)));
+  if (Number.isInteger(value)) {
+    return String(value);
+  }
+  const trimmed = value.toFixed(10).replace(/\.?0+$/, '');
+  return trimmed === '-0' ? '0' : trimmed;
 }
 
 function calculate() {
   try {
     expression = evaluateExpression(expression);
-  } catch {
-    expression = 'Error';
+  } catch (error) {
+    expression = error instanceof Error ? error.message : 'Error';
   }
   render();
 }
@@ -331,8 +335,9 @@ function getChatReply(userText) {
     }
     try {
       return `Result: ${evaluateExpression(candidate)}`;
-    } catch {
-      return 'I could not evaluate that expression. Please check the format.';
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : 'invalid expression';
+      return `I could not evaluate that expression: ${reason}.`;
     }
   }
 
