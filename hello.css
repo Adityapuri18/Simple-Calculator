@@ -183,3 +183,17 @@ button:active {
     max-height: 360px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
+
+  .card {
+    animation: none;
+  }
+
+  * {
+    transition: none !important;
+  }
+}
