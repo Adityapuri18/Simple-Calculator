@@ -22,6 +22,16 @@ function ensureInputReady() {
   }
 }
 
+function isUnaryMinusContext(previousToken) {
+  if (!previousToken) {
+    return true;
+  }
+  if (previousToken.type === 'operator' || previousToken.type === 'function') {
+    return true;
+  }
+  return previousToken.type === 'paren' && previousToken.value === '(';
+}
+
 function render() {
   display.value = expression || '0';
 }
@@ -179,7 +189,7 @@ function toRpn(tokens) {
       stack.push(token);
     } else if (token.type === 'operator') {
       let op = token.value;
-      const isUnaryMinus = op === '-' && (!previous || (previous.type === 'operator') || (previous.type === 'paren' && previous.value === '(') || previous.type === 'function');
+      const isUnaryMinus = op === '-' && isUnaryMinusContext(previous);
       if (isUnaryMinus) {
         op = 'u-';
       }

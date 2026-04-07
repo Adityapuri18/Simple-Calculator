@@ -4,7 +4,7 @@
   --panel: rgba(15, 23, 42, 0.78);
   --text: #e2e8f0;
   --accent: #22d3ee;
-  --accent-2: #8b5cf6;
+  --accent-purple: #8b5cf6;
   --danger: #fb7185;
 }
 
@@ -94,7 +94,7 @@ button:active {
 }
 
 .equal {
-  background: linear-gradient(140deg, var(--accent-2), #6366f1);
+  background: linear-gradient(140deg, var(--accent-purple), #6366f1);
 }
 
 .accent {
