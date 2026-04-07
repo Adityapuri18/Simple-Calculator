@@ -5,11 +5,22 @@ const chatInput = document.getElementById('chatInput');
 const chatMessages = document.getElementById('chatMessages');
 
 let expression = '0';
+let hasError = false;
 
 const functionNames = ['sin', 'cos', 'tan', 'sqrt', 'log', 'ln', 'abs'];
 const operators = ['+', '-', '*', '/', '%', '^'];
+const DECIMAL_PLACES = 10;
+const PRECEDENCE = { '+': 1, '-': 1, '*': 2, '/': 2, '%': 2, '^': 3, 'u-': 4 };
+const RIGHT_ASSOCIATIVE = new Set(['^', 'u-']);
 
 const isDigit = (char) => /\d/.test(char);
+
+function ensureInputReady() {
+  if (hasError) {
+    expression = '0';
+    hasError = false;
+  }
+}
 
 function render() {
   display.value = expression || '0';
@@ -17,10 +28,12 @@ function render() {
 
 function allClear() {
   expression = '0';
+  hasError = false;
   render();
 }
 
 function appendValue(value) {
+  ensureInputReady();
   if (expression === '0' && isDigit(value)) {
     expression = value;
   } else {
@@ -30,6 +43,7 @@ function appendValue(value) {
 }
 
 function appendFunction(value) {
+  ensureInputReady();
   if (expression === '0') {
     expression = value;
   } else {
@@ -39,6 +53,7 @@ function appendFunction(value) {
 }
 
 function backspace() {
+  ensureInputReady();
   if (expression.length <= 1) {
     expression = '0';
   } else {
@@ -48,6 +63,7 @@ function backspace() {
 }
 
 function toggleSign() {
+  ensureInputReady();
   const match = expression.match(/(-?\d+(\.\d+)?)$/);
   if (!match) {
     return;
@@ -82,7 +98,7 @@ function tokenize(input) {
         i += 1;
       }
       if (Number.isNaN(Number(number))) {
-        throw new Error('Invalid number');
+        throw new Error(`Invalid number format: ${number}`);
       }
       tokens.push({ type: 'number', value: Number(number) });
       continue;
@@ -103,7 +119,7 @@ function tokenize(input) {
         tokens.push({ type: 'constant', value: word });
         continue;
       }
-      throw new Error('Invalid function');
+      throw new Error(`Unknown function: ${word}`);
     }
 
     if (operators.includes(char)) {
@@ -154,8 +170,6 @@ function withImplicitMultiplication(tokens) {
 function toRpn(tokens) {
   const output = [];
   const stack = [];
-  const precedence = { '+': 1, '-': 1, '*': 2, '/': 2, '%': 2, '^': 3, 'u-': 4 };
-  const rightAssociative = new Set(['^', 'u-']);
 
   let previous = null;
   for (const token of tokens) {
@@ -175,8 +189,8 @@ function toRpn(tokens) {
         if (
           top.type === 'operator' &&
           (
-            (rightAssociative.has(op) && precedence[op] < precedence[top.value]) ||
-            (!rightAssociative.has(op) && precedence[op] <= precedence[top.value])
+            (RIGHT_ASSOCIATIVE.has(op) && PRECEDENCE[op] < PRECEDENCE[top.value]) ||
+            (!RIGHT_ASSOCIATIVE.has(op) && PRECEDENCE[op] <= PRECEDENCE[top.value])
           )
         ) {
           output.push(stack.pop());
@@ -304,15 +318,17 @@ function evaluateExpression(input) {
   if (Number.isInteger(value)) {
     return String(value);
   }
-  const trimmed = value.toFixed(10).replace(/\.?0+$/, '');
+  const trimmed = value.toFixed(DECIMAL_PLACES).replace(/\.?0+$/, '');
   return trimmed === '-0' ? '0' : trimmed;
 }
 
 function calculate() {
   try {
     expression = evaluateExpression(expression);
+    hasError = false;
   } catch (error) {
     expression = error instanceof Error ? error.message : 'Error';
+    hasError = true;
   }
   render();
 }
@@ -362,10 +378,6 @@ function getChatReply(userText) {
 
 calcButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    if (expression === 'Error' && button.dataset.action !== 'all-clear') {
-      expression = '0';
-    }
-
     const { action, value } = button.dataset;
     if (action === 'append') appendValue(value);
     if (action === 'func') appendFunction(value);
@@ -379,7 +391,6 @@ calcButtons.forEach((button) => {
 document.addEventListener('keydown', (event) => {
   const key = event.key;
   if (/[\d.+\-*/%^()]/.test(key)) {
-    if (expression === 'Error') expression = '0';
     appendValue(key);
   } else if (key === 'Enter') {
     event.preventDefault();
