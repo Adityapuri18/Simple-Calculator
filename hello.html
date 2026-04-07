@@ -3,37 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simple Calculator</title>
+  <title>Advanced Calculator</title>
   <link rel="stylesheet" href="hello.css" />
 </head>
 <body>
-  <div class="calculator">
-     <h1 class = "text-center">Calculate Me</h1>
-    <input type="text" class="display" disabled />
-    <div class="buttons">
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>/</button>
-      
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>*</button>
-      
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>-</button>
-      
-      <button>0</button>
-      <button>.</button>
-      <button>=</button>
-      <button>+</button>
-      
-      <button class="clear">C</button>
-  </div>
-  </div>
+  <main class="app-shell">
+    <section class="calculator card">
+      <h1>Advanced Animated Calculator</h1>
+      <input type="text" class="display" value="0" readonly aria-label="Calculator display" />
+      <div class="buttons">
+        <button data-action="all-clear" class="accent">AC</button>
+        <button data-action="backspace">DEL</button>
+        <button data-action="append" data-value="(">(</button>
+        <button data-action="append" data-value=")">)</button>
+
+        <button data-action="func" data-value="sin(">sin</button>
+        <button data-action="func" data-value="cos(">cos</button>
+        <button data-action="func" data-value="tan(">tan</button>
+        <button data-action="append" data-value="^">xʸ</button>
+
+        <button data-action="func" data-value="sqrt(">√</button>
+        <button data-action="func" data-value="log(">log</button>
+        <button data-action="func" data-value="ln(">ln</button>
+        <button data-action="func" data-value="abs(">abs</button>
+
+        <button data-action="append" data-value="7">7</button>
+        <button data-action="append" data-value="8">8</button>
+        <button data-action="append" data-value="9">9</button>
+        <button data-action="append" data-value="/">÷</button>
+
+        <button data-action="append" data-value="4">4</button>
+        <button data-action="append" data-value="5">5</button>
+        <button data-action="append" data-value="6">6</button>
+        <button data-action="append" data-value="*">×</button>
+
+        <button data-action="append" data-value="1">1</button>
+        <button data-action="append" data-value="2">2</button>
+        <button data-action="append" data-value="3">3</button>
+        <button data-action="append" data-value="-">-</button>
+
+        <button data-action="append" data-value="0">0</button>
+        <button data-action="append" data-value=".">.</button>
+        <button data-action="toggle-sign">±</button>
+        <button data-action="append" data-value="+">+</button>
+
+        <button data-action="append" data-value="π">π</button>
+        <button data-action="append" data-value="e">e</button>
+        <button data-action="append" data-value="%">%</button>
+        <button data-action="calculate" class="equal">=</button>
+      </div>
+    </section>
+
+    <section class="chat card" aria-label="User query chat section">
+      <h2>Quick Help Chat</h2>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">Hi! Ask me calculator questions like "how to use sqrt?" or "calculate 5*(7+3)".</div>
+      </div>
+      <form class="chat-form" id="chatForm">
+        <input type="text" id="chatInput" placeholder="Type your query..." aria-label="Chat input" required />
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
   <script src="hello.js"></script>
 </body>
 </html>
