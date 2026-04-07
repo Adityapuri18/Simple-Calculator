@@ -14,4 +14,4 @@ This project now includes:
 
 ## Run
 
-Open `/home/runner/work/Simple-Calculator/Simple-Calculator/hello.html` in a browser.
+Open `hello.html` in a browser.

@@ -301,7 +301,7 @@ function evaluateExpression(input) {
   const tokens = withImplicitMultiplication(tokenize(input));
   const rpn = toRpn(tokens);
   const value = evalRpn(rpn);
-  return Number.isInteger(value) ? String(value) : String(Number(value.toFixed(10)));
+  return Number.isInteger(value) ? String(value) : String(parseFloat(value.toFixed(10)));
 }
 
 function calculate() {
