@@ -1,52 +1,199 @@
+:root {
+  --bg-dark: #0f172a;
+  --bg-mid: #1e293b;
+  --panel: rgba(15, 23, 42, 0.78);
+  --text: #e2e8f0;
+  --accent: #22d3ee;
+  --accent-purple: #8b5cf6;
+  --danger: #fb7185;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: #f3f3f3;
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(-45deg, #020617, #0f172a, #1e293b, #0c4a6e);
+  background-size: 300% 300%;
+  animation: gradientShift 16s ease infinite;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.app-shell {
+  width: min(1100px, 100%);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 2fr 1fr;
+  align-items: start;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 1rem;
+  box-shadow: 0 14px 36px rgba(2, 6, 23, 0.5);
+  backdrop-filter: blur(8px);
+  animation: cardFloat 4.5s ease-in-out infinite;
 }
 
 .calculator {
-  margin-left: 80px;
-  margin-top: 130px;
-  width: 400px;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  background: #1a0560;
+  padding: 1.25rem;
+}
+
+.calculator h1 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  text-align: center;
 }
 
 .display {
-  border-radius: 12px;
-  width: 380px;
-  font-size: 2em;
-  color: aliceblue;
-  padding: 10px;
-  margin-bottom: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 0.8rem;
+  background: #0b1024;
+  color: #f8fafc;
+  font-size: clamp(1.2rem, 4vw, 1.9rem);
+  padding: 0.9rem;
+  margin-bottom: 0.8rem;
   text-align: right;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.3);
 }
 
 .buttons {
-  border-radius: 12px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
 }
 
 button {
-  padding: 20px;
-  font-size: 1.2em;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.8rem 0.55rem;
+  color: #f8fafc;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  background: linear-gradient(140deg, #334155, #1e293b);
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
 }
 
-.IM.img{
-  border: 5px salmon;
+button:hover {
+  transform: translateY(-2px) scale(1.01);
+  filter: brightness(1.08);
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
 }
 
-.text-center{
+button:active {
+  transform: scale(0.97);
+}
+
+.equal {
+  background: linear-gradient(140deg, var(--accent-purple), #6366f1);
+}
+
+.accent {
+  background: linear-gradient(140deg, var(--danger), #ef4444);
+}
+
+.chat {
   display: flex;
-  justify-content: center;
-  color: #f3f3f3;
-  font-family: 'Times New Roman', Times, serif;
+  flex-direction: column;
+  min-height: 300px;
+  max-height: 560px;
+  padding: 1rem;
+}
+
+.chat h2 {
+  margin: 0 0 0.7rem;
+  font-size: 1.05rem;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  border-radius: 0.7rem;
+  padding: 0.7rem;
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.2);
+  margin-bottom: 0.7rem;
+}
+
+.message {
+  max-width: 95%;
+  margin-bottom: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.65rem;
+  line-height: 1.4;
+  font-size: 0.92rem;
+}
+
+.message.user {
+  margin-left: auto;
+  background: rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+}
+
+.message.bot {
+  margin-right: auto;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+}
+
+.chat-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.55rem;
+}
+
+.chat-form input {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  color: #f8fafc;
+  border-radius: 0.6rem;
+  padding: 0.7rem;
+}
+
+.chat-form button {
+  background: linear-gradient(140deg, var(--accent), #0284c7);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .chat {
+    max-height: 360px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
+
+  .card {
+    animation: none;
+  }
+
+  * {
+    transition: none !important;
+  }
 }
